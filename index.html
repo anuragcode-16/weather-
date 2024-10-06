@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #5b21b6;
+            --secondary-color: #ddd6fe;
+            --background-color: #f5f3ff;
+            --text-color: #1e1b4b;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .dashboard {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .city-select-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .city-select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            background-color: white;
+            font-size: 16px;
+        }
+
+        .user-icons {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .weather-card {
+            background-image: url('https://via.placeholder.com/800x400');
+            background-size: cover;
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .highlights {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .highlight-item {
+            text-align: center;
+        }
+
+        .forecast-chart {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .rain-chance,
+        .forecast {
+            background-color: var(--secondary-color);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .forecast-days {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .forecast-day {
+            text-align: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.jpeg" alt="Weather Logo">
+            <span>WeatherNow</span>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-item">Home</div>
+            <div class="sidebar-item">Forecast</div>
+            <div class="sidebar-item">Locations</div>
+            <div class="sidebar-item">Analytics</div>
+            <div class="sidebar-item">Calendar</div>
+            <div class="sidebar-item">Settings</div>
+        </div>
+        <div class="main-content">
+            <div class="city-select-bar">
+                <select class="city-select" id="city-select">
+                    <option value="">Select a city</option>
+                    <option value="New York">New York, USA</option>
+                    <option value="London">London, UK</option>
+                    <option value="Tokyo">Tokyo, Japan</option>
+                    <option value="Paris">Paris, France</option>
+                    <option value="Sydney">Sydney, Australia</option>
+                    <option value="Dubai">Dubai, UAE</option>
+                    <option value="Mumbai">Mumbai, India</option>
+                    <option value="Rio de Janeiro">Rio de Janeiro, Brazil</option>
+                    <option value="Cairo">Cairo, Egypt</option>
+                    <option value="Moscow">Moscow, Russia</option>
+                </select>
+                <div class="user-icons">
+                    <span>🔔</span>
+                    <span>👤</span>
+                </div>
+            </div>
+            <div class="weather-card">
+                <h2 id="city-name">Loading...</h2>
+                <h1 id="temperature">--°C</h1>
+                <p id="date-time"></p>
+                <p id="weather-description">--</p>
+            </div>
+            <div class="highlights">
+                <div class="highlight-item">
+                    <h3>Precipitation</h3>
+                    <p id="precipitation">--%</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>Humidity</h3>
+                    <p id="humidity">--%</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>Wind</h3>
+                    <p id="wind-speed">-- km/h</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>Sunrise & Sunset</h3>
+                    <p id="sun-times">🌅 -- 🌇 --</p>
+                </div>
+            </div>
+            <div class="forecast-chart">
+                <h3>Today's Forecast</h3>
+                <!-- Placeholder for chart -->
+                <p>Chart would go here</p>
+            </div>
+            <div class="rain-chance">
+                <h3>Chance of Rain</h3>
+                <!-- Placeholder for rain chance chart -->
+                <p>Rain chance chart would go here</p>
+            </div>
+            <div class="forecast">
+                <h3>3 Days Forecast</h3>
+                <div class="forecast-days" id="forecast-container">
+                    <!-- Forecast days will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 WeatherNow. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+        const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
+        const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
+
+        async function fetchWeatherData(city) {
+            try {
+                const response = await fetch(`${BASE_URL}?q=${city}&units=metric&appid=${API_KEY}`);
+                const data = await response.json();
+                updateWeatherUI(data);
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+
+        async function fetchForecastData(city) {
+            try {
+                const response = await fetch(`${FORECAST_URL}?q=${city}&units=metric&appid=${API_KEY}`);
+                const data = await response.json();
+                updateForecastUI(data);
+            } catch (error) {
+                console.error('Error fetching forecast data:', error);
+            }
+        }
+
+        function updateWeatherUI(data) {
+            document.getElementById('city-name').textContent = `${data.name}, ${data.sys.country}`;
+            document.getElementById('temperature').textContent = `${Math.round(data.main.temp)}°C`;
+            document.getElementById('weather-description').textContent = data.weather[0].description;
+            document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+            document.getElementById('wind-speed').textContent = `${data.wind.speed} km/h`;
+
+            const date = new Date();
+            document.getElementById('date-time').textContent = date.toLocaleString('en-US', { weekday: 'long', hour: 'numeric', minute: 'numeric', hour12: true });
+
+            const sunrise = new Date(data.sys.sunrise * 1000);
+            const sunset = new Date(data.sys.sunset * 1000);
+            document.getElementById('sun-times').textContent = `🌅 ${sunrise.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })} 🌇 ${sunset.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`;
+        }
+
+        function updateForecastUI(data) {
+            const forecastContainer = document.getElementById('forecast-container');
+            forecastContainer.innerHTML = ''; // Clear existing forecast
+
+            const threeDayForecast = data.list.filter(item => {
+                const date = new Date(item.dt * 1000);
+                return date.getHours() === 12 && date.getDate() > new Date().getDate();
+            }).slice(0, 3);
+
+            threeDayForecast.forEach(day => {
+                const date = new Date(day.dt * 1000);
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+                const temp = Math.round(day.main.temp);
+                const icon = day.weather[0].icon;
+
+                const forecastDay = document.createElement('div');
+                forecastDay.className = 'forecast-day';
+                forecastDay.innerHTML = `
+                    <p>${dayName}</p>
+                    <img src="http://openweathermap.org/img/wn/${icon}.png" alt="Weather icon">
+                    <p>${temp}°C</p>
+                `;
+                forecastContainer.appendChild(forecastDay);
+            });
+        }
+
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        fetchWeatherByCoords(lat, lon);
+                    },
+                    error => {
+                        console.error('Error getting user location:', error);
+                        fetchWeatherData('London'); // Default city if geolocation fails
+                    }
+                );
+            } else {
+                console.log('Geolocation is not supported by this browser.');
+                fetchWeatherData('London'); // Default city if geolocation is not supported
+            }
+        }
+
+        async function fetchWeatherByCoords(lat, lon) {
+            try {
+                const response = await fetch(`${BASE_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`);
+                const data = await response.json();
+                updateWeatherUI(data);
+                document.getElementById('city-select').value = data.name;
+            } catch (error) {
+                console.error('Error fetching weather data by coordinates:', error);
+            }
+        }
+
+        document.getElementById('city-select').addEventListener('change', function () {
+            const selectedCity = this.value;
+            if (selectedCity) {
+                fetchWeatherData(selectedCity);
+                fetchForecastData(selectedCity);
+            }
+        });
+
+        // Initialize the dashboard
+        getUserLocation();
+    </script>
+</body>
+
+</html>
